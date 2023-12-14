@@ -3,7 +3,7 @@ using System.Xml.XPath;
 
 namespace AcordXmlServiceSample.Model;
 public record Contact {
-	public string? RoleCd { get; init; }
+	public string[] RoleCds { get; init; } = Array.Empty<string>();
 	public string? Name { get; init; }
 	public string? Phone { get; init; }
 	public string? Email { get; init; }
@@ -16,7 +16,7 @@ public record Contact {
 			string? lastName = element.XPathSelectElement("GeneralPartyInfo/NameInfo/PersonName/Surname")?.Value;
 			string? contactName = string.IsNullOrEmpty(firstName) && string.IsNullOrEmpty(lastName) ? null : string.Join(" ", firstName, lastName);
 			contacts.Add(new Contact {
-				RoleCd = element.XPathSelectElement("MiscPartyInfo/MiscPartyRoleCd")?.Value,
+				RoleCds = element.XPathSelectElements("MiscPartyInfo/MiscPartyRoleCd")?.Select(r => r.Value).ToArray() ?? Array.Empty<string>(),
 				Name = contactName,
 				Phone = element.XPathSelectElement("GeneralPartyInfo/Communications/PhoneInfo[PhoneTypeCd = 'Phone' and CommunicationUseCd = 'Business']/PhoneNumber")?.Value
 					?? element.XPathSelectElement("GeneralPartyInfo/Communications/PhoneInfo[PhoneTypeCd = 'Cell']/PhoneNumber")?.Value

@@ -77,9 +77,11 @@ public class Case1ReadSaveRequestDataController : ControllerBase {
 			resultSb.AppendLine("Contact Information:");
 			foreach (Contact contact in mainInsured.Contacts) {
 				resultSb.AppendLine($"-- Name: {contact.Name ?? "N/A"}")
-					.AppendLine($"---- Role code: {contact.RoleCd ?? "N/A"}")
 					.AppendLine($"---- Phone #: {contact.Phone ?? "N/A"}")
 					.AppendLine($"---- Email: {contact.Email ?? "N/A"}");
+				if (contact.RoleCds.Length > 0) {
+					resultSb.AppendLine($"---- Role code: {string.Join(',', contact.RoleCds)}");
+				} else { resultSb.AppendLine($"---- Role code: N/A"); }
 			}
 		} else { resultSb.AppendLine("Contact Information: N/A"); }
 
